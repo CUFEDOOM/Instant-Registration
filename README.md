@@ -7,12 +7,14 @@ you can copy and paste the script in snippet.js in the chrome console once u see
 you must specify lectures and tutorials in the following form :
 
 IF THE LECTURE HAS A TUTORIAL :
+
 selectLec('Lecture day','Course Code','Lecture Location','lecture start hour',3,'Tutorial day','Tutorial Location','tutorial
 start hour');
 
 ex: selectLec('Tuesday','MTHN002','51201(Zayed)-50',8,3,'Tuesday','51201(Zayed)-50',10);
 
 IF THE LECTURE DOESN'T HAVE A TUTORIAL :
+
 selectLec('Lecture day','Course Code','Lecture Location','lecture start hour',2);
 
 ex: selectLec('Wednesday','GENN002','51204 (Zayed)-50',12,2);
@@ -33,5 +35,7 @@ another tip just don't push to master push to your own branch.
 # TODO list
 
 1- GUI.
+
 2- NPAPI chrome extension for faster injection.
+
 3- More ways for bypassing the API algorithm.
