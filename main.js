@@ -1,145 +1,137 @@
 "use strict";
 var window;
 var document;
-var GetLectureByID = function (aLectureID) {
-    var i, j;
-    var TimeTable = window.TimeTable;
-    for (i = 0; i < TimeTable.length; i++) {
-        for (j = 0; j < TimeTable[i].Lectures.length; j++) {
-            if (TimeTable[i].Lectures[j].ElementID === aLectureID) {
-                return TimeTable[i].Lectures[j];
+var GetLectureByID = function(a) {
+    var d, c;
+    var b = window.TimeTable;
+    for (d = 0; d < b.length; d++) {
+        for (c = 0; c < b[d].Lectures.length; c++) {
+            if (b[d].Lectures[c].ElementID === a) {
+                return b[d].Lectures[c]
             }
         }
     }
 };
-var getDay = function (day) {
-    switch (day) {
-        case 'Sunday':
-            return 0;
-        case 'Monday':
-            return 1;
-        case 'Tuesday':
-            return 2;
-        case 'Wednesday':
-            return 3;
-        default:
-            return 4;
+var getDay = function(a) {
+    switch (a) {
+    case "Sunday":
+        return 0;
+    case "Monday":
+        return 1;
+    case "Tuesday":
+        return 2;
+    case "Wednesday":
+        return 3;
+    default:
+        return 4
     }
 };
-var GetSelectedLectures = function () {
-    var i, j, SLectures;
-    SLectures = '';
-    var TimeTable = window.TimeTable;
-    for (i = 0; i < TimeTable.length; i++) {
-        for (j = 0; j < TimeTable[i].Lectures.length; j++) {
-            if (TimeTable[i].Lectures[j].Selected) {
-                SLectures = SLectures + ',' + TimeTable[i].Lectures[j].SchId; //.substr(7);
+var GetSelectedLectures = function() {
+    var d, c, a;
+    a = "";
+    var b = window.TimeTable;
+    for (d = 0; d < b.length; d++) {
+        for (c = 0; c < b[d].Lectures.length; c++) {
+            if (b[d].Lectures[c].Selected) {
+                a = a + "," + b[d].Lectures[c].SchId
             }
         }
     }
-    SLectures = SLectures + ',';
-    document.all.StdSelectedLecs.value = SLectures;
+    a = a + ",";
+    document.all.StdSelectedLecs.value = a
 };
-var handleErrors = function (day, code, loc, start, hours, tday, tloc, tstart) {
-    if (!day)
-        return "You Have to Enter the Day of The Lecture";
-    if (!code)
-        return "You Have to Enter the Code of The Course ex: 'MTHN001'";
-    if (!loc)
-        return "You Have to Enter the Location of The Lecture copied from the Registeration Status Report";
-    if (!start)
-        return "You Have to Enter the Start hour of The Lecture";
-    if (!hours)
-        return "You Have to Enter the Credit Hours of The Course";
-    return false;
+var handleErrors = function(c, f, g, h, a, e, b, d) {
+    if (!c) {
+        return "You Have to Enter the Day of The Lecture"
+    }
+    if (!f) {
+        return "You Have to Enter the Code of The Course ex: 'MTHN001'"
+    }
+    if (!g) {
+        return "You Have to Enter the Location of The Lecture copied from the Registeration Status Report"
+    }
+    if (!h) {
+        return "You Have to Enter the Start hour of The Lecture"
+    }
+    if (!a) {
+        return "You Have to Enter the Credit Hours of The Course"
+    }
+    return false
 };
-function selectLec(day, code, loc, start, hours, tday, tloc, tstart) {
-    var error = handleErrors(day, code, loc, start, hours, tday, tloc, tstart);
-    if (error)
-        return error;
-    var addMag = 5; // for every hour checking make sure it is == not === because start is string in SIS
-    var flag = 0;
-    var dayi = getDay(day);
-    var tdayi = getDay(tday);
-    var TimeTable = window.TimeTable;
-    if (hours === 3) {
-        if (loc === '') {
-            for (var i = 0; i < TimeTable[tdayi].Lectures.length; i++) {
-                var currentTutorial = TimeTable[tdayi].Lecture[i];
-                if (currentTutorial.Code === code &&
-                    currentTutorial.Type === 'Tutorial' &&
-                    currentTutorial.Location === tloc &&
-                    currentTutorial.Start == (tstart + addMag) % 12) {
-                    currentTutorial.Selected = true;
-                    var lecturesid = currentTutorial.Group;
-                    if (!lecturesid.includes(',')) {
-                        var possibleLecture = GetLectureByID(lecturesid);
-                        if (possibleLecture.Location === tloc &&
-                            possibleLecture.Start == (start + addMag) % 12) {
-                            flag = 1;
-                            possibleLecture.Selected = true;
+function selectLec(s, b, g, e, v, a, p, k) {
+    var q = handleErrors(s, b, g, e, v, a, p, k);
+    if (q) {
+        return q
+    }
+    var w = 5;
+    var t = 0;
+    var l = getDay(s);
+    var c = getDay(a);
+    var f = window.TimeTable;
+    if (v === 3) {
+        if (g === "") {
+            for (var u = 0; u < f[c].Lectures.length; u++) {
+                var x = f[c].Lecture[u];
+                if (x.Code === b && x.Type === "Tutorial" && x.Location === p && x.Start == (k + w) % 12) {
+                    x.Selected = true;
+                    var o = x.Group;
+                    if (!o.includes(",")) {
+                        var d = GetLectureByID(o);
+                        if (d.Location === p && d.Start == (e + w) % 12) {
+                            t = 1;
+                            d.Selected = true
                         }
-                    }
-                    else {
-                        var lecturesidArray = lecturesid.split(',');
-                        for (var j = 0; j < lecturesidArray.length; j++) {
-                            var possibleLecture = GetLectureByID(lecturesidArray[j]);
-                            if (possibleLecture.Location === tloc &&
-                                possibleLecture.Start == (start + addMag) % 12) {
-                                possibleLecture.Selected = true;
+                    } else {
+                        var z = o.split(",");
+                        for (var r = 0; r < z.length; r++) {
+                            var d = GetLectureByID(z[r]);
+                            if (d.Location === p && d.Start == (e + w) % 12) {
+                                d.Selected = true
                             }
                         }
                     }
                     GetSelectedLectures();
-                    break;
+                    break
                 }
             }
-        }
-        else {
-            for (var i = 0; i < TimeTable[dayi].Lectures.length; i++) {
-                var currentLecture = TimeTable[dayi].Lectures[i];
-                if (currentLecture.Code === code &&
-                    currentLecture.Type === 'Lecture' &&
-                    currentLecture.Location === loc &&
-                    currentLecture.Start == (start + addMag) % 12) {
-                    currentLecture.Selected = true;
-                    var tutorialsid = currentLecture.Group;
-                    if (!tutorialsid.includes(',')) {
-                        var possibleTutorial = GetLectureByID(tutorialsid);
-                        if (possibleTutorial.Location === tloc &&
-                            possibleTutorial.Start == (tstart + addMag) % 12) {
-                            possibleTutorial.Selected = true;
+        } else {
+            for (var u = 0; u < f[l].Lectures.length; u++) {
+                var n = f[l].Lectures[u];
+                if (n.Code === b && n.Type === "Lecture" && n.Location === g && n.Start == (e + w) % 12) {
+                    n.Selected = true;
+                    var h = n.Group;
+                    if (!h.includes(",")) {
+                        var y = GetLectureByID(h);
+                        if (y.Location === p && y.Start == (k + w) % 12) {
+                            y.Selected = true;
                             GetSelectedLectures();
-                            break;
+                            break
                         }
-                    }
-                    else {
-                        var tutorialsidArray = tutorialsid.split(',');
-                        for (var j = 0; j < tutorialsidArray.length; j++) {
-                            var possibleTutorial = GetLectureByID(tutorialsidArray[j]);
-                            if (possibleTutorial.Location === tloc &&
-                                possibleTutorial.Start == (tstart + addMag) % 12) {
-                                possibleTutorial.Selected = true;
+                    } else {
+                        var m = h.split(",");
+                        for (var r = 0; r < m.length; r++) {
+                            var y = GetLectureByID(m[r]);
+                            if (y.Location === p && y.Start == (k + w) % 12) {
+                                y.Selected = true;
                                 GetSelectedLectures();
-                                break;
+                                break
                             }
                         }
                     }
                 }
             }
         }
-    }
-    else if (hours === 1 || hours === 2) {
-        for (var i = 0; i < TimeTable[dayi].Lectures.length; i++) {
-            var currentLecture = TimeTable[dayi].Lectures[i];
-            if (currentLecture.Code === code &&
-                currentLecture.Type === 'Lecture' &&
-                currentLecture.Location === loc &&
-                currentLecture.Start == (start + addMag) % 12) {
-                currentLecture.Selected = true;
-                GetSelectedLectures();
-                break;
+    } else {
+        if (v === 1 || v === 2) {
+            for (var u = 0; u < f[l].Lectures.length; u++) {
+                var n = f[l].Lectures[u];
+                if (n.Code === b && n.Type === "Lecture" && n.Location === g && n.Start == (e + w) % 12) {
+                    n.Selected = true;
+                    GetSelectedLectures();
+                    break
+                }
             }
         }
     }
 }
+;
